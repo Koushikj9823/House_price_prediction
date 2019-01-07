@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jan  4 22:05:00 2019
-
-@author: Koushik
-"""
-
 
 # -*- coding: utf-8 -*-
 """
@@ -35,11 +28,13 @@ alpha = 0.01
 ones = np.ones((m,1)) 
 X = np.hstack((ones, X))
 iterations = 1500
+cost = np.zeros((len(iterations),1))
 
 def costfunc(X_train,y_train,theta): #Determine the Cost Function
        temp = np.dot(X_train, theta) - y_train
        return np.sum(np.power(temp, 2)) / (2*m)
-J = costfunc(X_train, y_train, theta)
+
+J = costfunc(X_train, y_train, theta) #Determine the Cost
 print(J)
         
 def grad(X,y,alpha,theta): #Gradient Descent to find global minima
@@ -47,17 +42,21 @@ def grad(X,y,alpha,theta): #Gradient Descent to find global minima
         temp=np.dot(X,theta)-y
         temp=np.dot(X.T,temp)
         theta = theta - (alpha/m)*temp
+        cost[i]= costfunc(X, y, theta)
     return theta
 
 theta = grad(X_train, y_train, alpha,theta) #Calculate theta(Parameters)
 print(theta)   
-        
-J = costfunc(X_train, y_train, theta)
-print(J) 
+    
 
-
-res=np.dot(X_test,theta)
-print(res)
+#Plot Cost vs iterations graph 
+iters = list()
+for i in range(len(cost)):
+    iters.append(i+1)
+plt.figure("Cost v/s Iterations")
+plt.xlabel('Iterations')
+plt.ylabel('Cost')
+plt.plot(iters, cost, 'b')
 
 
 
